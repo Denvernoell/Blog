@@ -3,6 +3,15 @@ import tkinter as tk
 import streamlit as st
 import os
 
+st.set_page_config(
+    page_title="Spotify Downloader",
+    page_icon=":shark:",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    })
+
 st.title('Spotify Downloader')
 
 
