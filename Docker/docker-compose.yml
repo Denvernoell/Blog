@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  streamlit:
+    build: ./streamlit
+    volumes:
+      - ./streamlit:/usr/src/app
+    ports:
+      - 80:80
+    # image: python:3.10
+  #   depends_on:
+  #     - ffmpeg
+
+  # ffmpeg:
+  #   image: jrottenberg/ffmpeg
+  #   ports:
+  #     - 81:80

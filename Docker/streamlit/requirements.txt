@@ -1,0 +1,4 @@
+streamlit
+# pint
+# pyperclip
+spotdl
