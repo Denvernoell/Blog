@@ -5,6 +5,13 @@ import time
 import streamlit as st
 from send_email import email_alert
 
+from pega_search import Store, Horse
+
+
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+# import markdown
+
 # import plyer
 
 option = webdriver.ChromeOptions()
@@ -20,33 +27,15 @@ driver = webdriver.Chrome(
     options=option)
 
 
-class Store:
-    def __init__(self, driver):
-
-        self.driver = driver
-        self.num_horses = len(driver.find_elements(
-            'class name', 'content-name-title'))
-        self.horses = [Horse(driver, i) for i in range(
-            self.num_horses-1) if type(Horse(driver, i).price) == int]
-
-
-class Horse:
-    def __init__(self, driver, i):
-        self.driver = driver
-        price = (driver.find_elements(
-            'class name', 'content-name-title')[i].text)
-        name = (driver.find_elements('class name', 'item-info-title')[i].text)
-        rarity, breed_type, gender = (driver.find_elements(
-            'class name', 'item-info-meta')[i].text).replace(' ', '').split('•')
-
-        try:
-            self.price = int(price.replace(',', ''))
-        except:
-            self.price = price
-        self.name = name
-        self.rarity = rarity
-        self.breed_type = breed_type
-        self.gender = gender
+st.set_page_config(
+    page_title="Pegaxy Checker",
+    page_icon=":horse:",
+)
+# menu_items={
+#     'Get Help': 'https://www.extremelycoolapp.com/help',
+#     'Report a bug': "https://www.extremelycoolapp.com/bug",
+#     'About': "# This is a header. This is an *extremely* cool app!"
+# }
 
 
 st.title('Pegaxy Checker')
@@ -70,7 +59,9 @@ if st.button("Check"):
     found = False
     while found == False:
         driver.get(URL)
-        time.sleep(5)
+        # This will look for 5 seconds for any element to appear
+        driver.implicitly_wait(5)
+
         S = Store(driver)
         # print(len(S.horses))
 
@@ -82,8 +73,22 @@ if st.button("Check"):
         if len(available_horses) > 0:
             message = "Horse List"
             for horse in available_horses:
+
+                #                 # Markdown
+                #                 markdown_msg += f"""Name: {horse.name}
+
+                # Price: ${horse.price}
+
+                # Link: (Here)[{horse.auction_link}]
+                #                 """
+
+                # Text
                 message += "\n" + "\n" + \
-                    (f'Buy {horse.name} at ${horse.price}')
+                    (f"""Name: {horse.name}
+Price: ${horse.price}
+Link: {horse.auction_link}
+---   
+""")
             # st.markdown(message)
 
             #     plyer.notification.notify(
@@ -92,10 +97,25 @@ if st.button("Check"):
             # 	app_icon='pegasus.ico',
             # 	timeout=10
             # )
+
+            # # Markdown
+            # multipart_msg = MIMEMultipart("alternative")
+            # html = markdown.markdown(markdown_msg)
+
+            # part1 = MIMEText(markdown_msg, "plain")
+            # part2 = MIMEText(html, "html")
+
+            # multipart_msg.attach(part1)
+            # multipart_msg.attach(part2)
+
+            # message = multipart_msg.as_string()
+
+            # Send
             email_alert(
                 to=my_email,
                 subject="Pegas for you",
                 body=message)
+
             found = True
             st.success("Message sent")
 
