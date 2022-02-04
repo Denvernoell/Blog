@@ -1,0 +1,17 @@
+name: gis
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - qgis
+    - geopandas
+    - ipykernel
+    - ipython
+    - pip
+    - pip:
+          - icecream
+          - openpyxl
+          - pint
+          - xlwings
+          - arcgis
+          - esri

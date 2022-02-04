@@ -1,0 +1,7 @@
+name: arc
+channels:
+    - conda-forge
+dependencies:
+    - python=3.1
+    - esri
+    - arcgis
